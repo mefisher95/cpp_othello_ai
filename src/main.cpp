@@ -1,13 +1,11 @@
 #include <iostream>
-#include "Database.h"
+#include "Database_connector.h"
 
 int main()
 {
-    Database db;
-    std::cout << db << std::endl;
-    // db.show_databases();
-
-    std::cout << db.is_database("tests") << std::endl;
-    std::cout << db.show_databases() << std::endl;
+    Database_connector dbc("root", "root", "Othello", "127.0.0.1");
+    dbc.clear_records();
+    dbc.start_game();
+    std::cout << dbc.current_game() << std::endl;
     return 0;
 }
