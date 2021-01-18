@@ -14,9 +14,9 @@ int main()
 
     std::cout << board << std::endl;
 
-    std::cout << board.player0_popcount() << std::endl;
-    std::cout << board.player1_popcount() << std::endl;
-    std::cout << board.board_popcount() << std::endl;
+    board.make_move(0, 63);
+    board.make_move(0, 62);
+    board.print();
 
 
 

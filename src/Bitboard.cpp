@@ -12,6 +12,16 @@ int Bitboard::board_popcount() const { return (player0_ | player1_).pop_count();
 int Bitboard::player0_popcount() const { return player0_.pop_count(); }
 int Bitboard::player1_popcount() const { return player1_.pop_count(); }
 
+void Bitboard::print()
+{
+    for (int i = 0; i < 64; ++i)
+    {
+        if (player0()[i]) std::cout << "X";
+        else if (player1()[i]) std::cout << "O";
+        else std::cout << " ";
+    }
+}
+
 void Bitboard::make_move(const int player, const int pos)
 {
     if ((player0_ | player1_)[pos]) throw BitException(0, ("Invalid Position; position '" + std::to_string(pos) + "' already occupied").c_str());
