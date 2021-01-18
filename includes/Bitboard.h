@@ -1,7 +1,6 @@
 #ifndef BITBOARD_H
 #define BITBOARD_H
 
-#include
 
 class Bitboard
 {
