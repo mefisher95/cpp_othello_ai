@@ -1,8 +1,11 @@
 #ifndef BITBOARD_H
 #define BITBOARD_H
 
-#include <iostream>
+#include <ostream>
 #include "Bitmap.h"
+#include "Exception.h"
+
+
 
 
 class Bitboard

@@ -14,7 +14,6 @@ Database_connector::Database_connector(const std::string &user,
     {
         database.create_database(db);
         database.use_database(db);
-        std::cout << database.current_database() << std::endl;
         create_games();
         create_moves();
     }

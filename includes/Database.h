@@ -1,27 +1,16 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-#include <iostream>
+#include <ostream>
 #include <mysql.h>
 #include <string>
 #include <vector>
 #include "util.h"
+#include "Exception.h"
 
 typedef std::vector<std::vector<std::string>> RESULT_VEC;
 typedef std::vector<std::string> STRING_VEC;
 
-
-class MySQLException
-{
-public:
-    MySQLException(int error_code, const char* error);
-    int error_code() const;
-    std::string error_message() const;
-
-private:
-    int error_code_;
-    std::string error_message_;
-};
 
 class Database
 {
@@ -67,6 +56,5 @@ private:
 std::ostream &operator<<(std::ostream &cout, const Database &);
 std::ostream &operator<<(std::ostream &cout, const RESULT_VEC &);
 std::ostream &operator<<(std::ostream &cout, const STRING_VEC &);
-std::ostream &operator<<(std::ostream &cout, const MySQLException &);
 
 #endif
