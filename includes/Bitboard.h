@@ -1,17 +1,25 @@
 #ifndef BITBOARD_H
 #define BITBOARD_H
 
+#include <iostream>
+#include "Bitmap.h"
+
 
 class Bitboard
 {
 public:
-    Bitboard()
-    : player0(0), player1(0)
-    {}
+    Bitboard(int = 0, int = 0);
+
+    Bitmap player0() const;
+    Bitmap player1() const;
+
+    void make_move(const int, const int);
 
 private:
-    uint64_t player0;
-    uint64_t player1;
+    Bitmap player0_;
+    Bitmap player1_;
 };
+
+std::ostream &operator<<(std::ostream &cout, const Bitboard &bitboard);
 
 #endif
