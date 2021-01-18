@@ -15,6 +15,9 @@ public:
 
     Bitmap player0() const;
     Bitmap player1() const;
+    int board_popcount() const;
+    int player0_popcount() const;
+    int player1_popcount() const;
 
     void make_move(const int, const int);
 

@@ -8,7 +8,7 @@ cmd = 'g++ '
 src = ['src/*.cpp']
 include = ['-I/usr/include/mysql', '-Iincludes']
 link = ['-L/usr/lib/mysl', '-lmysqlclient']
-output = 'db_exe.out'
+output = 'othello_exe.out'
 
 for s in src:
     cmd += s + ' '
