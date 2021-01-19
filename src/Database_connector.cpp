@@ -35,10 +35,10 @@ void Database_connector::start_game()
 void Database_connector::clear_records()
 {
     std::string db = database.current_database();
-    // database.drop_database(db);
-    // database.create_database(db);
+
     database.drop_table("Moves");
     database.drop_table("Games");
+    
     create_games();
     create_moves();
 }

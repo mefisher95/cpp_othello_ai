@@ -1,23 +1,32 @@
 #include "Bitmap.h"
 
-Bitmap::Bitmap(int n)
+Bitmap::Bitmap(uint64_t n)
 : map_(n)
 {}
 
+Bitmap::Bitmap(const Bitmap &bm)
+: map_(bm.map())
+{}
+
+
 uint64_t& Bitmap::map() { return map_; }
 uint64_t Bitmap::map() const { return map_; }
+
+Bitmap Bitmap::operator~ () const { return ~map(); }
 
 Bitmap Bitmap::operator& (const Bitmap &bm) const { return map() &  bm.map(); }
 Bitmap Bitmap::operator| (const Bitmap &bm) const { return map() | bm.map(); }
 Bitmap Bitmap::operator^ (const Bitmap &bm) const { return map() ^  bm.map(); }
 Bitmap Bitmap::operator>>(const Bitmap &bm) const { return map() >> bm.map(); }
 Bitmap Bitmap::operator<<(const Bitmap &bm) const { return map() << bm.map(); }
+uint64_t Bitmap::operator%(const Bitmap &bm) const { return map() % bm.map(); }
 
-Bitmap Bitmap::operator& (const int n) const { return map() & n; }
-Bitmap Bitmap::operator| (const int n) const { return map() | n; }
-Bitmap Bitmap::operator^ (const int n) const { return map() ^ n; }
-Bitmap Bitmap::operator>>(const int n) const { return map() >> n; }
-Bitmap Bitmap::operator<<(const int n) const { return map() << n; }
+Bitmap Bitmap::operator& (const uint64_t n) const { return map() & n; }
+Bitmap Bitmap::operator| (const uint64_t n) const { return map() | n; }
+Bitmap Bitmap::operator^ (const uint64_t n) const { return map() ^ n; }
+Bitmap Bitmap::operator>>(const uint64_t n) const { return map() >> n; }
+Bitmap Bitmap::operator<<(const uint64_t n) const { return map() << n; }
+uint64_t Bitmap::operator%(const uint64_t n) const { return map() % n; }
 
 bool Bitmap::operator[](const int n) const { return (map() >> n) % 2; }
 
@@ -34,6 +43,8 @@ int Bitmap::pop_count() const
     count += n;
     return count;
 }
+
+bool Bitmap::is_empty() const { return !pop_count(); }
 
 std::ostream &operator<<(std::ostream &cout, const Bitmap &bm)
 {

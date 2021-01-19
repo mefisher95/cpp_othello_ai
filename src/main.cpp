@@ -2,26 +2,39 @@
 #include "Database_connector.h"
 #include "Bitboard.h"
 
+
+
 int main()
 {
+
+    uint64_t input = 0;
+    for (int k = 0; k < 7; ++k)
+    {
+        input += (uint64_t(1) << (8 * k+7));
+        // std::cout << input << std::endl;
+    }
+    for (int k = 56; k < 64; ++k)
+    {
+        input += (uint64_t(1) << k);
+    }
+    std::cout << input << std::endl;
     Bitboard board;
-    std::cout << board << std::endl;
-    board.make_move(0, 0);
-
-    board.make_move(1, 1);
-    board.make_move(1, 2);
-    board.make_move(1, 3);
-
-    std::cout << board << std::endl;
-
-    board.make_move(0, 63);
-    board.make_move(0, 62);
+    // std::cout << board << std::endl;
+    // std::cout << Bitmap(input) << std::endl;
+    // Bitboard board;
     board.print();
+    std::vector< DirTuple > moves = board.get_actions(0);
+    std::cout << moves << std::endl;
+    board.print(moves);
+    //
+    // for (int i = 0; i < moves.size(); ++i)
+    // {
+    //     std::cout << moves[i] << std::endl;
+    //     board.make_move(0, moves[i][1]);
+    // }
+    // board.print();
 
 
-
-    // uint64_t n = 0x5555555555555555;
-    // std::cout << n << std::endl;
     return 0;
 
 }
