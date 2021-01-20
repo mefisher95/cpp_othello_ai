@@ -1,13 +1,12 @@
 #include <iostream>
-#include "Database_connector.h"
-#include "Bitboard.h"
+#include "Player.h"
 
 
 
 int main()
 {
 
-    
+
     Bitboard board;
     // std::cout << board << std::endl;
     // std::cout << Bitmap(input) << std::endl;
