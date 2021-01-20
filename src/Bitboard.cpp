@@ -3,10 +3,7 @@
 #include <cmath>
 
 Bitboard::Bitboard(uint64_t player0, uint64_t player1)
-: player0_(player0), player1_(player1),
-  W_(uint64_t(72340172838076673)), E_(uint64_t(9259542123273814144)),
-  SW_(uint64_t(18374969058471772417)), SE_(uint64_t(18410856566090662016)),
-  NW_(uint64_t(72340172838076927)), NE_(uint64_t(9259542123273814271))
+: player0_(player0), player1_(player1)
 {
     make_move(1, 27);
     make_move(0, 28);
@@ -32,10 +29,6 @@ void Bitboard::print(std::vector< DirTuple > possible_moves) const
         std::cout << possible_moves[i][1] << std::endl;
         candidates = candidates |  (Bitmap(1)<< possible_moves[i][1]);
     }
-    Bitmap North;
-    Bitmap South;
-    Bitmap East;
-
 
     std::cout << "+-+-+-+-+-+-+-+-+" << std::endl;
     for (int i = 0; i < 64; ++i)
@@ -66,21 +59,311 @@ void Bitboard::make_move(const bool player, const int pos)
     }
 }
 
-void Bitboard::make_move(const bool player, const uint64_t pos)
+void Bitboard::make_move(const bool current_player, const DirTuple & player_move)
 {
-    if (pos < 0 || uint64_t(log2(pos)) > 63) throw BitException(2, ("Invalid Position; position '" + std::to_string(log2(pos)) + "' outside valid range (0-63) (Bitmap pos)").c_str());
-    if ((player0_ | player1_)[uint64_t(log2(pos))]) throw BitException(3, ("Invalid Position; position '" + std::to_string(log2(pos)) + "' already occupied (int pos)").c_str());
+    uint64_t pos = player_move[1];
+    Bitmap empty_map(0);
+    Bitmap original_move(Bitmap(1) << pos);
+    std::cout << original_move << std::endl;
+    Bitmap move = original_move;
+    Bitmap captured_pieces = empty_map;
+    Bitmap x;
 
-    switch (player)
+    Bitmap player, opponent;
+    if (current_player)
     {
-        case 0:
-        player0_ = (player0_ | pos);
-        return;
-
-        case 1:
-        player1_ = (player1_ | pos);
-        return;
+        player = player1_;
+        opponent = player0_;
     }
+    else
+    {
+        player = player0_;
+        opponent = player1_;
+    }
+
+    player = player | move;
+
+    // North capture
+    move = move >> n;
+    for (int i = 0; i < n && !(move & opponent).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move >> n;
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // South
+    move = move << n;
+    for (int i = 0; i < n && !(move & opponent).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move << n;
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // East
+    move = move << n;
+    x = E_;
+    for (int i = 0; i < n && (!(move & opponent).is_empty()); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move << 1;
+        x = x | (x << 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    //West
+    move = move >> 1;
+    x = W_;
+    for (int i = 0; i < 8 && !(move & opponent & (~x)).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move >> 1;
+        x = x | (x >> 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // North East
+    move = move >> n - 1;
+    x = NE_;
+    for (int i = 0; i < n && !(move & opponent & (~x)).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move >> n - 1;
+        x = x | (x >> n - 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // North West
+    move = move >> n + 1;
+    x = NW_;
+    for (int i = 0; i < n && !(move & opponent & (~x)).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move >> n + 1;
+        x = x | (x >> n + 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // South East
+    move = move << n + 1;
+    x = SE_;
+    for (int i = 0; i < n && !(move & opponent & (~x)).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move << n + 1;
+        x = x | (x << n + 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+    move = original_move;
+    captured_pieces = empty_map;
+
+    // South West
+    move = move << n - 1;
+    x = SW_;
+    for (int i = 0; i < n && !(move & opponent & (~x)).is_empty(); ++i)
+    {
+        captured_pieces = captured_pieces | (move & opponent);
+        move = move << n - 1;
+        x = x | (x << n - 1);
+    }
+    if (!(move & player).is_empty())
+    {
+        player = player | captured_pieces;
+        opponent = opponent ^ captured_pieces;
+    }
+
+
+    // reasign back to players, may optomize with pointers
+    if (current_player)
+    {
+        player1_ = player;
+        player0_ = opponent;
+    }
+    else
+    {
+        player0_ = player;
+        player1_ = opponent;
+    }
+}
+
+std::vector< DirTuple > Bitboard::get_actions(const bool player_piece)
+{
+    std::vector< DirTuple > all_moves;
+    Bitmap empty_map(0), moves(0), empty_positions(~(player0_ | player1_));
+
+    //set players
+    Bitmap player, opponent;
+    if (player_piece)
+    {
+        player = player1();
+        opponent = player0();
+    }
+    else
+    {
+        player = player0();
+        opponent = player1();
+    }
+
+
+    // North
+    moves = empty_map;
+    Bitmap candidates(opponent & (player << 8));
+    while (!candidates.is_empty())
+    {
+        moves = moves | empty_positions & (candidates << 8);
+        candidates = opponent & (candidates << 8);
+    }
+    if (!moves.is_empty()) all_moves.push_back(DirTuple(N, moves));
+
+    // South
+    moves = empty_map;
+    candidates = opponent & (player >> 8);
+    while(!candidates.is_empty())
+    {
+        moves = moves | empty_positions & (candidates >> 8);
+        candidates = opponent & (candidates >> 8);
+    }
+    if (!moves.is_empty()) all_moves.push_back(DirTuple(S, moves));
+
+    // East
+    moves = empty_map;
+    candidates = opponent & (player >> 1);
+    Bitmap x(E_);
+
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x >> uint64_t(1));
+        moves = moves | empty_positions & (candidates >> uint64_t(1)) & ~(x);
+        candidates = opponent & (candidates >> uint64_t(1));
+    }
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(E, moves));
+    std::cout << "moves at E "<< moves << std::endl;
+
+    // West
+    moves = empty_map;
+    candidates = opponent & (player << 1);
+    x = W_;
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x << uint64_t(1));
+        moves = moves | empty_positions & (candidates << uint64_t(1)) & ~(x);
+        candidates = opponent & (candidates << uint64_t(1));
+    }
+
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(W, moves));
+
+    // North West
+    moves = empty_map;
+    candidates = opponent & (player << 9);
+    x = NW_;
+
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x << uint64_t(9));
+        moves = moves | empty_positions & (candidates << uint64_t(9)) & ~(x);
+        candidates = opponent & (candidates << uint64_t(9));
+    }
+
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(NW, moves));
+
+    // South West
+    moves = empty_map;
+    candidates = opponent & (player >> 7);
+    x = SW_;
+
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x >> uint64_t(7));
+        moves = moves | empty_positions & (candidates >> uint64_t(7)) & ~(x);
+        candidates = opponent & (candidates >> uint64_t(7));
+    }
+
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(SW, moves));
+
+
+    // North East
+    moves = empty_map;
+    candidates = opponent & (player << 7);
+    x = NE_;
+
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x << uint64_t(7));
+        moves = moves | empty_positions & (candidates << uint64_t(7)) & ~(x);
+        candidates = opponent & (candidates << uint64_t(7));
+    }
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(NE, moves));
+
+
+
+    // South East
+    moves = empty_map;
+    candidates = opponent & (player >> 9);
+    x = SE_;
+    for (int i = 0; i < 8 && !candidates.is_empty(); ++i)
+    {
+        x = x | (x >> uint64_t(9));
+        moves = moves | empty_positions & (candidates >> uint64_t(9)) & ~(x);
+        candidates = opponent & (candidates >> uint64_t(9));
+    }
+    if(!moves.is_empty()) all_moves.push_back(DirTuple(SE, moves));
+
+    std::vector< DirTuple > seperate_moves;
+
+    for (int i = 0; i < all_moves.size(); ++i)
+    {
+        std::vector< int > moves_as_indicies = extract_moves(all_moves[i][1]);
+
+        for (int k = 0; k < moves_as_indicies.size(); ++k)
+        {
+            if (should_add_index(seperate_moves, moves_as_indicies[k]))
+            seperate_moves.push_back(DirTuple(direction(all_moves[i][0]), moves_as_indicies[k]));
+        }
+    }
+
+    return seperate_moves;
 }
 
 std::vector< int > Bitboard::extract_moves(Bitmap move_as_map)
@@ -96,6 +379,15 @@ std::vector< int > Bitboard::extract_moves(Bitmap move_as_map)
     }
 
     return moves_as_indicies;
+}
+
+bool Bitboard::should_add_index(std::vector< DirTuple > &seperate_moves, int index)
+{
+    for (int i = 0; i < seperate_moves.size(); ++i)
+    {
+        if (seperate_moves[i][1] == index) return false;
+    }
+    return true;
 }
 
 std::ostream &operator<<(std::ostream &cout, const Bitboard &bitboard)

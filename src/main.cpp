@@ -7,24 +7,16 @@
 int main()
 {
 
-    uint64_t input = 0;
-    for (int k = 0; k < 7; ++k)
-    {
-        input += (uint64_t(1) << (8 * k+7));
-        // std::cout << input << std::endl;
-    }
-    for (int k = 56; k < 64; ++k)
-    {
-        input += (uint64_t(1) << k);
-    }
-    std::cout << input << std::endl;
+    
     Bitboard board;
     // std::cout << board << std::endl;
     // std::cout << Bitmap(input) << std::endl;
     // Bitboard board;
-    board.print();
+    // board.print();
     std::vector< DirTuple > moves = board.get_actions(0);
     std::cout << moves << std::endl;
+    board.print(moves);
+    board.make_move(0, moves[0]);
     board.print(moves);
     //
     // for (int i = 0; i < moves.size(); ++i)
