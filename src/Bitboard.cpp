@@ -23,8 +23,6 @@ int Bitboard::player1_popcount() const { return player1_.pop_count(); }
 
 void Bitboard::print(std::vector< DirTuple > possible_moves) const
 {
-    std::cout << possible_moves.size() << std::endl;
-
     Bitmap candidates;
 
     for (int i = 0; i < possible_moves.size(); ++i)
@@ -66,7 +64,6 @@ void Bitboard::make_move(const bool player, const int pos)
 
 void Bitboard::make_move(const bool current_player, const DirTuple & player_move)
 {
-    std::cout << "player_move in make_move " << player_move << std::endl;
     uint64_t pos = player_move[1];
     Bitmap empty_map(0);
     Bitmap original_move(Bitmap(1) << pos);
@@ -120,10 +117,7 @@ void Bitboard::make_move(const bool current_player, const DirTuple & player_move
     captured_pieces = empty_map;
 
     // East
-    std::cout << move << std::endl;
     move = move << 1;
-    std::cout << "n = " << n << std::endl;
-    std::cout << move << std::endl;
     x = E_;
     for (int i = 0; i < n && (!(move & opponent).is_empty()); ++i)
     {
@@ -136,8 +130,6 @@ void Bitboard::make_move(const bool current_player, const DirTuple & player_move
         player = player | captured_pieces;
         opponent = opponent ^ captured_pieces;
     }
-    std::cout << player << std::endl;
-    std::cout << opponent << std::endl;
     move = original_move;
     captured_pieces = empty_map;
 
@@ -290,7 +282,6 @@ std::vector< DirTuple > Bitboard::get_actions(const bool player_piece)
         candidates = opponent & (candidates >> uint64_t(1));
     }
     if(!moves.is_empty()) all_moves.push_back(DirTuple(E, moves));
-    std::cout << "moves at E "<< moves << std::endl;
 
     // West
     moves = empty_map;

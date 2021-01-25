@@ -40,34 +40,22 @@ public:
         delete p1brain;
     }
 
-    int get_current_player() const { return player_turn; }
-
     void play_game()
     {
         print_board();
-
-        int move = get_current_player();
-        for (int i = 0; i < 10; ++i)
+        int turn = 0;
+        while(!stalemate())
         {
-            make_move(move);
-            move = !move;
+            std::cout << "TURN: " << turn << std::endl;
+            player_turn ? std::cout << "BLACK(@)" << std::endl
+                        : std::cout << "WHITE(0)" << std::endl;
+            make_move(player_turn);
+            player_turn = !player_turn;
             print_board();
+            ++turn;
         }
-
-
-    }
-
-    void make_move(int move)
-    {
-        DirTuple pos(N, -1);
-        move ? pos = p1brain->make_move(board.get_actions(move)):
-               pos = p0brain->make_move(board.get_actions(move));
-
-        board.make_move(move, pos);
-
-        // wrap up
-        black_piece_count = board.player0_popcount();
-        white_piece_count = board.player1_popcount();
+        std::cout << "Black Count: " << board.player0_popcount() << std::endl;
+        std::cout << "White Count: " << board.player1_popcount() << std::endl;
     }
 
 
@@ -82,26 +70,23 @@ private:
     int player_turn;
     int black_piece_count, white_piece_count;
 
-    int convert_char(std::string &input)
+    void make_move(int move)
     {
-        int character = int(input[0]);
-        if (character > 96 && character < 105) return character - 97;
-        else if (character > 64 && character < 73) return character - 65;
-        return -1;
+        DirTuple pos(N, -1);
+        move ? pos = p1brain->make_move(board.get_actions(move)):
+               pos = p0brain->make_move(board.get_actions(move));
+
+        if (pos[1] == -1) return;
+        board.make_move(move, pos);
+
+        // wrap up
+        black_piece_count = board.player0_popcount();
+        white_piece_count = board.player1_popcount();
     }
 
-    int convert_pos(int x, int y) const
+    bool stalemate()
     {
-        return 8 * y + x;
-    }
-
-    DirTuple assign_position(const std::vector< DirTuple > &available_pos, const int &move)
-    {
-        for (int i = 0; i < available_pos.size(); ++i)
-        {
-            if (move == available_pos[i][1]) return available_pos[i];
-        }
-        return DirTuple(N, -1);
+        return !(board.get_actions(0).size() || board.get_actions(1).size());
     }
 };
 

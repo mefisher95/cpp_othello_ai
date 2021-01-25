@@ -1,6 +1,9 @@
 #ifndef BRAIN_H
 #define BRAIN_H
 
+#include <ctime>
+#include <cstdlib>
+
 class Heuristic
 {};
 
@@ -16,6 +19,30 @@ public:
     virtual DirTuple make_move(const std::vector< DirTuple >&) const = 0;
 private:
     Heuristic* heuristic_;
+
+protected:
+    int convert_char(std::string &input) const
+    {
+        int character = int(input[0]);
+        if (character > 96 && character < 105) return character - 97;
+        else if (character > 64 && character < 73) return character - 65;
+        return -1;
+    }
+
+    int convert_pos(int x, int y) const
+    {
+        return 8 * y + x;
+    }
+
+    DirTuple assign_position(const std::vector< DirTuple > &available_pos, const int &move) const
+    {
+        for (int i = 0; i < available_pos.size(); ++i)
+        {
+            if (move == available_pos[i][1]) return available_pos[i];
+        }
+        return DirTuple(N, -1);
+    }
+
 };
 
 class User: public Brain
@@ -29,6 +56,7 @@ public:
 
     DirTuple make_move(const std::vector< DirTuple >& actions) const
     {
+        if (!actions.size()) return DirTuple(N, -1);
         DirTuple pos(N, -1);
         while(1)
         {
@@ -55,30 +83,6 @@ public:
             return pos;
         }
     }
-
-private:
-    int convert_char(std::string &input) const
-    {
-        int character = int(input[0]);
-        if (character > 96 && character < 105) return character - 97;
-        else if (character > 64 && character < 73) return character - 65;
-        return -1;
-    }
-
-    int convert_pos(int x, int y) const
-    {
-        return 8 * y + x;
-    }
-
-    DirTuple assign_position(const std::vector< DirTuple > &available_pos, const int &move) const
-    {
-        for (int i = 0; i < available_pos.size(); ++i)
-        {
-            if (move == available_pos[i][1]) return available_pos[i];
-        }
-        return DirTuple(N, -1);
-    }
-
 };
 
 class Random: public Brain
@@ -86,14 +90,16 @@ class Random: public Brain
 public:
     Random()
     :Brain(NULL)
-    {}
+    {
+        srand((unsigned int) time(NULL));
+    }
 
     void print() { std::cout << "this is a random brain" << std::endl; }
     
-    DirTuple make_move(const std::vector< DirTuple >&) const
+    DirTuple make_move(const std::vector< DirTuple >& actions) const
     {
-        std::cout  << "A random turn is being generated" << std::endl;
-        return DirTuple(N, -1);
+        if (!actions.size()) return DirTuple(N, -1);
+        return actions[rand() % actions.size()];
     }
 };
 
