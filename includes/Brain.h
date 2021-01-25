@@ -18,10 +18,10 @@ private:
     Heuristic* heuristic_;
 };
 
-class Random: public Brain
+class User: public Brain
 {
 public:
-    Random()
+    User()
     :Brain(NULL)
     {}
 
@@ -29,19 +29,31 @@ public:
 
     DirTuple make_move(const std::vector< DirTuple >& actions) const
     {
-        std::string input0;
-        int input1;
-        std::cout << "Enter input: ";
-        std::cin >> input0 >> input1;
-        int input0_int = convert_char(input0);
-    
-        if (input0.size() > 1 || input0_int == -1 || input1 > 7)
+        DirTuple pos(N, -1);
+        while(1)
         {
-            std::cout << "invalid input" << std::endl;
-            return;
+            std::string input0;
+            int input1;
+            std::cout << "Enter input: ";
+            std::cin >> input0 >> input1;
+            int input0_int = convert_char(input0);
+        
+            if (input0.size() > 1 || input0_int == -1 || input1 > 7)
+            {
+                std::cout << "invalid input" << std::endl;
+                continue;
+            }
+        
+            pos = assign_position(actions, convert_pos(input0_int, input1));
+
+            if (pos[1] == -1)
+            {
+                std::cout << "invalid move" << std::endl;
+                continue;
+            }
+
+            return pos;
         }
-    
-        return assign_position(actions, convert_pos(input0_int, input1));
     }
 
 private:
@@ -69,10 +81,10 @@ private:
 
 };
 
-class User: public Brain
+class Random: public Brain
 {
 public:
-    User()
+    Random()
     :Brain(NULL)
     {}
 
@@ -80,7 +92,7 @@ public:
     
     DirTuple make_move(const std::vector< DirTuple >&) const
     {
-        std::cout  << "user is taking his turn" << std::endl;
+        std::cout  << "A random turn is being generated" << std::endl;
         return DirTuple(N, -1);
     }
 };

@@ -5,10 +5,8 @@
 
 int main()
 {
-    Game game(0, 1);
-    game.make_move();
-    // std::cout << game.get_current_player() << std::endl;
-    game.print_board();
+    Game game;
+    game.play_game();
 
     return 0;
 

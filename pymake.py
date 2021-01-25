@@ -44,6 +44,9 @@ elif len(sys.argv) is 2:
     elif sys.argv[1].lower() == 'pull':
         subprocess.run(['git', 'pull'])
 
+    elif sys.argv[1].lower() == 'install':
+        subprocess.run('sudo yum install -y mysql-devel', shell=True)
+
     else:
         raise ValueError('Invalid Input: Not a valid command')
 else:
