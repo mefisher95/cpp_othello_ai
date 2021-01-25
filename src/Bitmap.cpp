@@ -34,12 +34,12 @@ int Bitmap::pop_count() const
 {
     int count = 0;
     uint64_t n = map_;
-    n = (n & 0x5555555555555555) + ((n & 0xAAAAAAAAAAAAAAAA) >> 1);
-    n = (n & 0x3333333333333333) + ((n & 0xCCCCCCCCCCCCCCCC) >> 2);
-    n = (n & 0x0F0F0F0F0F0F0F0F) + ((n & 0xF0F0F0F0F0F0F0F0) >> 4);
-    n = (n & 0x00FF00FF00FF00FF) + ((n & 0xFF00FF00FF00FF00) >> 8);
-    n = (n & 0x0000FFFF0000FFFF) + ((n & 0xFFFF0000FFFF0000) >> 16);
-    n = (n & 0x00000000FFFFFFFF) + ((n & 0xFFFFFFFF00000000) >> 32);
+    n = (n & 0X5555555555555555) + ((n & 0XAAAAAAAAAAAAAAAA) >> 1);
+    n = (n & 0X3333333333333333) + ((n & 0XCCCCCCCCCCCCCCCC) >> 2);
+    n = (n & 0X0F0F0F0F0F0F0F0F) + ((n & 0XF0F0F0F0F0F0F0F0) >> 4);
+    n = (n & 0X00FF00FF00FF00FF) + ((n & 0XFF00FF00FF00FF00) >> 8);
+    n = (n & 0X0000FFFF0000FFFF) + ((n & 0XFFFF0000FFFF0000) >> 16);
+    n = (n & 0X00000000FFFFFFFF) + ((n & 0XFFFFFFFF00000000) >> 32);
     count += n;
     return count;
 }

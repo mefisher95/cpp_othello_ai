@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cstdint>
 #include "Bitmap.h"
 #include "Exception.h"
 
@@ -48,12 +49,12 @@ public:
 private:
     Bitmap player0_;
     Bitmap player1_;
-    const Bitmap E_(uint64_t(0x8080808080808080));
-    const Bitmap W_(uint64_t(0x101010101010101));
-    const Bitmap NE_(uint64_t(0x80808080808080FF));
-    const Bitmap NW_(uint64_t(0x1010101010101FF));
-    const Bitmap SE_(uint64_t(0xFF80808080808080));
-    const Bitmap SW_(uint64_t(0xFF01010101010101));
+    const Bitmap E_;
+    const Bitmap W_;
+    const Bitmap NE_;
+    const Bitmap NW_;
+    const Bitmap SE_;
+    const Bitmap SW_;
     const int n = 8;
 
     std::vector< int > extract_moves(Bitmap);

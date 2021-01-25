@@ -3,7 +3,10 @@
 #include <cmath>
 
 Bitboard::Bitboard(uint64_t player0, uint64_t player1)
-: player0_(player0), player1_(player1)
+: player0_(player0), player1_(player1),
+E_(uint64_t(0x8080808080808080)), W_(uint64_t(0x101010101010101)),
+NE_(uint64_t(0x80808080808080FF)), NW_(uint64_t(0x1010101010101FF)),
+SE_(uint64_t(0xFF80808080808080)), SW_(uint64_t(0xFF01010101010101))
 {
     make_move(1, 27);
     make_move(0, 28);
@@ -29,18 +32,20 @@ void Bitboard::print(std::vector< DirTuple > possible_moves) const
         std::cout << possible_moves[i][1] << std::endl;
         candidates = candidates |  (Bitmap(1)<< possible_moves[i][1]);
     }
-
-    std::cout << "+-+-+-+-+-+-+-+-+" << std::endl;
+    std::cout << "  A B C D E F G H" << std::endl;
+    std::cout << " +-+-+-+-+-+-+-+-+" << std::endl;
     for (int i = 0; i < 64; ++i)
     {
-        std::cout << "|";
-        if (i > 0 && !(i % 8)) std::cout << "\n+-+-+-+-+-+-+-+-+\n|";
+        if (!i) std::cout << "0|";
+        if (i > 0) std::cout << "|";
+        if (i > 0 && !(i % 8)) std::cout << "\n +-+-+-+-+-+-+-+-+\n" << i / 8 << "|";
         if (player0()[i]) std::cout << "O";
         else if (player1()[i]) std::cout << "@";
         else if (candidates[i]) std::cout << "*";
         else std::cout << " ";
     }
-    std::cout << "|\n+-+-+-+-+-+-+-+-+" << std::endl;
+    std::cout << "|\n +-+-+-+-+-+-+-+-+" << std::endl;
+    std::cout << "  A B C D E F G H" << std::endl;
 }
 
 void Bitboard::make_move(const bool player, const int pos)
@@ -61,10 +66,10 @@ void Bitboard::make_move(const bool player, const int pos)
 
 void Bitboard::make_move(const bool current_player, const DirTuple & player_move)
 {
+    std::cout << "player_move in make_move " << player_move << std::endl;
     uint64_t pos = player_move[1];
     Bitmap empty_map(0);
     Bitmap original_move(Bitmap(1) << pos);
-    std::cout << original_move << std::endl;
     Bitmap move = original_move;
     Bitmap captured_pieces = empty_map;
     Bitmap x;
@@ -115,7 +120,10 @@ void Bitboard::make_move(const bool current_player, const DirTuple & player_move
     captured_pieces = empty_map;
 
     // East
-    move = move << n;
+    std::cout << move << std::endl;
+    move = move << 1;
+    std::cout << "n = " << n << std::endl;
+    std::cout << move << std::endl;
     x = E_;
     for (int i = 0; i < n && (!(move & opponent).is_empty()); ++i)
     {
@@ -128,8 +136,11 @@ void Bitboard::make_move(const bool current_player, const DirTuple & player_move
         player = player | captured_pieces;
         opponent = opponent ^ captured_pieces;
     }
+    std::cout << player << std::endl;
+    std::cout << opponent << std::endl;
     move = original_move;
     captured_pieces = empty_map;
+
 
     //West
     move = move >> 1;
