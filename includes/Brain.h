@@ -13,7 +13,7 @@ public:
     }
 
     virtual void print() { std::cout << "this is a brain" << std::endl; }
-    virtual int make_move() const = 0;
+    virtual DirTuple make_move(const std::vector< DirTuple >&) const = 0;
 private:
     Heuristic* heuristic_;
 };
@@ -27,11 +27,46 @@ public:
 
     void print() { std::cout << "this is a random brain" << std::endl; }
 
-    int make_move() const
+    DirTuple make_move(const std::vector< DirTuple >& actions) const
     {
-        std::cout << "making move with random" << std::endl;
-        return 0;
+        std::string input0;
+        int input1;
+        std::cout << "Enter input: ";
+        std::cin >> input0 >> input1;
+        int input0_int = convert_char(input0);
+    
+        if (input0.size() > 1 || input0_int == -1 || input1 > 7)
+        {
+            std::cout << "invalid input" << std::endl;
+            return;
+        }
+    
+        return assign_position(actions, convert_pos(input0_int, input1));
     }
+
+private:
+    int convert_char(std::string &input) const
+    {
+        int character = int(input[0]);
+        if (character > 96 && character < 105) return character - 97;
+        else if (character > 64 && character < 73) return character - 65;
+        return -1;
+    }
+
+    int convert_pos(int x, int y) const
+    {
+        return 8 * y + x;
+    }
+
+    DirTuple assign_position(const std::vector< DirTuple > &available_pos, const int &move) const
+    {
+        for (int i = 0; i < available_pos.size(); ++i)
+        {
+            if (move == available_pos[i][1]) return available_pos[i];
+        }
+        return DirTuple(N, -1);
+    }
+
 };
 
 class User: public Brain
@@ -43,10 +78,10 @@ public:
 
     void print() { std::cout << "this is a random brain" << std::endl; }
     
-    int make_move() const
+    DirTuple make_move(const std::vector< DirTuple >&) const
     {
         std::cout  << "user is taking his turn" << std::endl;
-        return 0;
+        return DirTuple(N, -1);
     }
 };
 
