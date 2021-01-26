@@ -10,27 +10,35 @@
 class Game
 {
 public:
-    Game(int player0_brain = 0, int player1_brain = 0)
+    Game(int player0_brain = BrainRandom, int player1_brain = BrainRandom)
     :player_turn(1)
     {
         switch (player0_brain)
         {
-            case 0:
+            case BrainUser:
             p0brain = new User();
             break;
 
-            case 1:
+            case BrainRandom:
             p0brain = new Random();
+            break;
+
+            case BrainHeuristicOnly:
+            p0brain = new HeuristicOnly();
             break;
         }
         switch (player1_brain)
         {
-            case 0:
+            case BrainUser:
             p1brain = new User();
             break;
 
-            case 1:
+            case BrainRandom:
             p1brain = new Random();
+            break;
+
+            case BrainHeuristicOnly:
+            p1brain = new HeuristicOnly();
             break;
         }
     }
@@ -73,8 +81,8 @@ private:
     void make_move(int move)
     {
         DirTuple pos(N, -1);
-        move ? pos = p1brain->make_move(board.get_actions(move)):
-               pos = p0brain->make_move(board.get_actions(move));
+        move ? pos = p1brain->make_move(board.get_actions(move), board):
+               pos = p0brain->make_move(board.get_actions(move), board);
 
         if (pos[1] == -1) return;
         board.make_move(move, pos);

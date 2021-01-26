@@ -6,8 +6,7 @@
 #include <cstdint>
 #include "Bitmap.h"
 #include "Exception.h"
-
-enum direction {N, S, E, W, NW, NE, SW, SE};
+#include "util.h"
 
 class DirTuple
 {

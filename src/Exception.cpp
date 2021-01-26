@@ -25,6 +25,15 @@ BitException::BitException(int error_code, const char* message)
     log_error(printmessage.c_str(), "error.log");
 }
 
+HeuristicException::HeuristicException(int error_code, const char* message)
+:Exception(error_code, message)
+{
+    std::string printmessage = "HeuristicException error " +
+                          std::to_string(Exception::error_code()) +
+                          ": " + Exception::error_message();
+    log_error(printmessage.c_str(), "error.log");
+}
+
 std::ostream &operator<<(std::ostream &cout, const MySQLException & e)
 {
     cout << "< MySQLException error# " << e.error_code()
@@ -35,6 +44,13 @@ std::ostream &operator<<(std::ostream &cout, const MySQLException & e)
 std::ostream &operator<<(std::ostream &cout, const BitException & e)
 {
     cout << "< BitException error# " << e.error_code()
+         << " : " << e.error_message() << " >";
+    return cout;
+}
+
+std::ostream &operator<<(std::ostream &cout, const HeuristicException &e)
+{
+    cout << "< HeuristicException error# " << e.error_code()
          << " : " << e.error_message() << " >";
     return cout;
 }

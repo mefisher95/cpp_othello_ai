@@ -16,3 +16,5 @@ Mon Jan 18 19:29:23 2021
 >> BitException error 2: Invalid Position; position '44.000000' outside valid range (0-63) (Bitmap pos)
 Mon Jan 18 20:01:54 2021
 >> BitException error 1: Invalid Position; position '35' already occupied (int pos)
+Mon Jan 25 19:56:27 2021
+>> BitException error 1: Invalid Position; position '27' already occupied (int pos)

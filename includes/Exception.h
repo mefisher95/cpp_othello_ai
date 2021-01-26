@@ -31,9 +31,16 @@ public:
     BitException(int error_code, const char* error);
 };
 
+class HeuristicException: public Exception
+{
+public:
+    HeuristicException(int error_code, const char* error);
+};
+
 
 std::ostream &operator<<(std::ostream &cout, const MySQLException &);
 std::ostream &operator<<(std::ostream &cout, const BitException &);
+std::ostream &operator<<(std::ostream &cout, const HeuristicException &);
 
 
 #endif

@@ -119,7 +119,7 @@ void Bitboard::make_move(const bool current_player, const DirTuple & player_move
     // East
     move = move << 1;
     x = E_;
-    for (int i = 0; i < n && (!(move & opponent).is_empty()); ++i)
+    for (int i = 0; i < n && (!(move & opponent & ~(x)).is_empty()); ++i)
     {
         captured_pieces = captured_pieces | (move & opponent);
         move = move << 1;

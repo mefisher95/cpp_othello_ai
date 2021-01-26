@@ -1,13 +1,15 @@
 #include <iostream>
 #include "Game.h"
-#include "Bitboard.h"
-
 
 int main()
 {
-    Game game(0, 1);
+
+
+    // Bitboard board();
+    // board.print();
+    Game game(BrainHeuristicOnly, BrainRandom);
     game.play_game();
-
+    // Heuristic* h = new RegionBaseWeights();
+    // h->print();
     return 0;
-
 }

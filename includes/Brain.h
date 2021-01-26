@@ -3,24 +3,20 @@
 
 #include <ctime>
 #include <cstdlib>
-
-class Heuristic
-{};
+#include "Heuristic.h"
 
 class Brain
 {
 public:
-    Brain(Heuristic* heuristic = NULL)
-    {
-        heuristic_ = heuristic;
-    }
+    Brain()
+    {}
 
     virtual void print() { std::cout << "this is a brain" << std::endl; }
-    virtual DirTuple make_move(const std::vector< DirTuple >&) const = 0;
-private:
-    Heuristic* heuristic_;
+    virtual DirTuple make_move(const std::vector< DirTuple >&,
+                               const Bitboard &board) const = 0;
 
 protected:
+    Heuristic* heuristic_;
     int convert_char(std::string &input) const
     {
         int character = int(input[0]);
@@ -49,12 +45,12 @@ class User: public Brain
 {
 public:
     User()
-    :Brain(NULL)
     {}
 
     void print() { std::cout << "this is a random brain" << std::endl; }
 
-    DirTuple make_move(const std::vector< DirTuple >& actions) const
+    DirTuple make_move(const std::vector< DirTuple >& actions,
+                       const Bitboard &board) const
     {
         if (!actions.size()) return DirTuple(N, -1);
         DirTuple pos(N, -1);
@@ -65,13 +61,13 @@ public:
             std::cout << "Enter input: ";
             std::cin >> input0 >> input1;
             int input0_int = convert_char(input0);
-        
+
             if (input0.size() > 1 || input0_int == -1 || input1 > 7)
             {
                 std::cout << "invalid input" << std::endl;
                 continue;
             }
-        
+
             pos = assign_position(actions, convert_pos(input0_int, input1));
 
             if (pos[1] == -1)
@@ -89,18 +85,48 @@ class Random: public Brain
 {
 public:
     Random()
-    :Brain(NULL)
     {
         srand((unsigned int) time(NULL));
     }
 
     void print() { std::cout << "this is a random brain" << std::endl; }
-    
-    DirTuple make_move(const std::vector< DirTuple >& actions) const
+
+    DirTuple make_move(const std::vector< DirTuple >& actions,
+                       const Bitboard &board) const
     {
         if (!actions.size()) return DirTuple(N, -1);
         return actions[rand() % actions.size()];
     }
+};
+
+class HeuristicOnly: public Brain
+{
+public:
+    HeuristicOnly()
+    {
+        heuristic_ = new RegionBaseWeights();
+    }
+    ~HeuristicOnly() { delete heuristic_; }
+
+    void print() { std::cout << "this is a random only brain" << std::endl; }
+
+    DirTuple make_move(const std::vector< DirTuple >& actions,
+                       const Bitboard &board) const
+   {
+       DirTuple action = actions[0];
+       int weight =  heuristic_->score_move(action[1]);
+       for (int i = 1; i < actions.size(); ++i)
+       {
+            DirTuple newaction = actions[i];
+            int newweight = heuristic_->score_move(newaction[1]);
+            if ( newweight > weight)
+            {
+                action = newaction;
+                weight = newweight;
+            }
+       }
+       return action;
+   }
 };
 
 
