@@ -18,11 +18,16 @@ public:
     virtual int score_board(const Bitboard &board, const bool player) = 0;
 
     virtual void print() const = 0;
+    virtual std::ostream& print(std::ostream &stm) const = 0;
+
 
 protected:
     const Bitmap one;
 
 };
+
+std::ostream& operator<<(std::ostream& stm, const Heuristic& h)
+{ return h.print(stm); } 
 
 class RegionBaseWeights: public Heuristic
 {
@@ -87,6 +92,8 @@ public:
         std::cout << std::endl;
     }
 
+    std::ostream& print(std::ostream& stm) const
+    { return stm << "Heuristic : RegionBasedWeights"; }
 private:
     const Bitmap region_corner;
     const Bitmap region_backedge;
@@ -94,12 +101,6 @@ private:
     const Bitmap region_guard;
     const Bitmap region_center;
     std::unordered_map< std::string, int > region_weights;
-
-    // corner regions 0x8100000000000081
-    // region_guard 0x42C300000000C342
-    // region_backedge 0x3C0081818181003C
-    // region_frontedge 0x3C424242423C00
-    // midregions 0x3C3C3C3C0000
 };
 
 

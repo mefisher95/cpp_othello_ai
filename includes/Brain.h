@@ -3,6 +3,7 @@
 
 #include <ctime>
 #include <cstdlib>
+#include <string>
 #include "Heuristic.h"
 
 class Brain
@@ -11,7 +12,9 @@ public:
     Brain()
     {}
 
-    virtual void print() { std::cout << "this is a brain" << std::endl; }
+    // virtual void print() { std::cout << "this is a brain" << std::endl; }
+    virtual std::ostream& print(std::ostream &stm) const = 0;
+    virtual std::string type() const = 0;
     virtual DirTuple make_move(const std::vector< DirTuple >&,
                                const Bitboard &board) const = 0;
 
@@ -41,13 +44,19 @@ protected:
 
 };
 
+std::ostream& operator<<(std::ostream& stm, const Brain& b)
+{ return b.print(stm); } 
+
 class User: public Brain
 {
 public:
     User()
     {}
 
-    void print() { std::cout << "this is a random brain" << std::endl; }
+    // void print() { std::cout << "this is a random brain" << std::endl; }
+    std::ostream& print(std::ostream& stm) const
+    { return stm << "< Brain: User >"; }
+    std::string type() const { return "User"; }
 
     DirTuple make_move(const std::vector< DirTuple >& actions,
                        const Bitboard &board) const
@@ -84,12 +93,12 @@ public:
 class Random: public Brain
 {
 public:
-    Random()
-    {
-        srand((unsigned int) time(NULL));
-    }
+    Random() { srand((unsigned int) time(NULL)); }
 
-    void print() { std::cout << "this is a random brain" << std::endl; }
+    // void print() { std::cout << "this is a random brain" << std::endl; }
+    std::string type() const { return "Random"; }
+    std::ostream& print(std::ostream& stm) const
+    { return stm << "< Brain: Random >"; }
 
     DirTuple make_move(const std::vector< DirTuple >& actions,
                        const Bitboard &board) const
@@ -102,21 +111,21 @@ public:
 class HeuristicOnly: public Brain
 {
 public:
-    HeuristicOnly()
-    {
-        heuristic_ = new RegionBaseWeights();
-    }
+    HeuristicOnly() { heuristic_ = new RegionBaseWeights(); }
     ~HeuristicOnly() { delete heuristic_; }
 
-    void print() { std::cout << "this is a random only brain" << std::endl; }
+    // void print() { std::cout << "this is a random only brain" << std::endl; }
+    std::string type() const { return "HeuristicOnly"; }
+    std::ostream& print(std::ostream& stm) const
+    { return stm << "< Brain: HeuristicOnly; " << *heuristic_ << " >"; }
 
     DirTuple make_move(const std::vector< DirTuple >& actions,
                        const Bitboard &board) const
-   {
-       DirTuple action = actions[0];
-       int weight =  heuristic_->score_move(action[1]);
-       for (int i = 1; i < actions.size(); ++i)
-       {
+    {
+        DirTuple action = actions[0];
+        int weight =  heuristic_->score_move(action[1]);
+        for (int i = 1; i < actions.size(); ++i)
+        {
             DirTuple newaction = actions[i];
             int newweight = heuristic_->score_move(newaction[1]);
             if ( newweight > weight)
@@ -124,10 +133,49 @@ public:
                 action = newaction;
                 weight = newweight;
             }
-       }
-       return action;
-   }
+        }
+        return action;
+    }
 };
+
+class Minimax: public Brain
+{
+public:
+    Minimax() { heuristic_ = new RegionBaseWeights(); }
+    ~Minimax() { delete heuristic_; }
+
+    std::string type() const { return "Minimax"; }
+    std::ostream& print(std::ostream& stm) const
+    { return stm << "< Brain: Minimax; " << *heuristic_ << " >"; }
+
+    DirTuple make_move(const std::vector< DirTuple >& actions,
+                       const Bitboard &board) const
+    {
+        return actions[0];
+    }
+};
+
+// std::ostream &operator<<(std::ostream &cout, const User &u)
+// {
+//     cout << "< User Brain >";
+//     return cout;
+// }
+// std::ostream &operator<<(std::ostream &cout, const Random &r)
+// {
+//     cout << "< Random Brain >";
+//     return cout;
+// }
+// std::ostream &operator<<(std::ostream &cout, const HeuristicOnly& ho)
+// {
+//     cout << "< HeuristicOnly Brain >";
+//     return cout;
+// }
+// std::ostream &operator<<(std::ostream &cout, const Minimax &m)
+// {
+//     cout << "< Minimax >";
+//     return cout;
+// }
+
 
 
 

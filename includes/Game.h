@@ -52,21 +52,62 @@ public:
     {
         print_board();
         int turn = 0;
-        while(!stalemate())
+        while(1)
         {
-            std::cout << "TURN: " << turn << std::endl;
-            player_turn ? std::cout << "BLACK(@)" << std::endl
-                        : std::cout << "WHITE(0)" << std::endl;
-            make_move(player_turn);
-            player_turn = !player_turn;
+            int action_count0 = board.get_actions(0).size();
+            int action_count1 = board.get_actions(1).size();
+
+            if (!action_count0 && !action_count1) break;
+
+            if (player_turn)
+            {
+                if (action_count1)
+                {
+                    std::cout << "TURN: " << turn << std::endl;
+                    std::cout << "BLACK(@)" << std::endl;
+                    make_move(player_turn);
+                    player_turn = !player_turn;
+                    ++turn;
+                }
+                else
+                {
+                    player_turn = !player_turn;
+                    continue;
+                }
+            }
+            else
+            {
+                if (action_count0)
+                {
+                    std::cout << "TURN: " << turn << std::endl;
+                    std::cout << "WHITE(0)" << std::endl;
+                    make_move(player_turn);
+                    player_turn = !player_turn;
+                    ++turn;
+                }
+                else
+                {
+                    player_turn = !player_turn;
+                    continue;
+                }
+            }
             print_board();
-            ++turn;
+            // std::cout << *p0brain << std::endl;
+            // std::cout << *p1brain << std::endl;
         }
-        std::cout << "Black Count: " << board.player0_popcount() << std::endl;
-        std::cout << "White Count: " << board.player1_popcount() << std::endl;
+
+        std::cout << "White Count: " 
+                  << board.player0_popcount() 
+                  << " Braintype: " 
+                  << *p0brain
+                  << std::endl;
+
+        std::cout << "Black Count: " 
+                  << board.player1_popcount() 
+                  << " Braintype: "
+                  << *p1brain
+                  << std::endl;
     }
-
-
 
     void print_board() { board.print(); }
 
@@ -76,7 +117,6 @@ private:
     Bitboard board;
 
     int player_turn;
-    int black_piece_count, white_piece_count;
 
     void make_move(int move)
     {
@@ -86,15 +126,6 @@ private:
 
         if (pos[1] == -1) return;
         board.make_move(move, pos);
-
-        // wrap up
-        black_piece_count = board.player0_popcount();
-        white_piece_count = board.player1_popcount();
-    }
-
-    bool stalemate()
-    {
-        return !(board.get_actions(0).size() || board.get_actions(1).size());
     }
 };
 
