@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Database.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -190,7 +191,7 @@ void Database::insert_row(const std::string & name, const STRING_VEC &fields,
     sql += ";";
 
 
-    // std::cout << sql << std::endl;
+    std::cout << sql << std::endl;
     mysql_free_result(commit(sql.c_str()));
 }
 

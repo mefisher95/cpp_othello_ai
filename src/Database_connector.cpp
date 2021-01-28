@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Database_connector.h"
 
 Database_connector::Database_connector(const std::string &user,
@@ -23,11 +24,22 @@ Database_connector::Database_connector(const std::string &user,
 }
 
 
-void Database_connector::start_game()
+void Database_connector::start_game(const std::string &p0brain,
+                                    const std::string &p1brain)
 {
     STRING_VEC fields;
     RESULT_VEC arg_vect;
-    fields.push_back("");
+    std::vector < std::string > arg;
+    arg.push_back(p0brain);
+    arg.push_back(p1brain);
+    arg_vect.push_back(arg);
+
+    fields.push_back("p0brain");
+    fields.push_back("p1brain");
+
+    std::cout << fields << std::endl;
+    std::cout << arg_vect << std::endl;
+
     database.insert_row("Games", fields, arg_vect);
     current_game_ = get_latest_game();
 }
@@ -72,6 +84,8 @@ void Database_connector::create_games()
     STRING_VEC fields;
     fields.push_back("id INT AUTO_INCREMENT");
     fields.push_back("winner INT");
+    fields.push_back("p0brain VARCHAR(100)");
+    fields.push_back("p1brain VARCHAR(100)");
     fields.push_back("primary key (id)");
     database.create_table("Games", fields);
 }

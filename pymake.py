@@ -5,9 +5,9 @@ import glob
 import os
 
 cmd = 'g++ '
-src = ['src/*.cpp']
-include = ['-I/usr/include/mysql', '-Iincludes']
-link = ['-L/usr/lib/mysl', '-lmysqlclient']
+src = ['src/*.cpp', 'sdl2_src/*.cpp']
+include = ['-I/usr/include/mysql', '-Iincludes', '-Isdl2_includes']
+link = ['-L/usr/lib/mysl', '-lmysqlclient', '-lSDL2']
 output = 'othello_exe.out'
 
 for s in src:
@@ -46,6 +46,13 @@ elif len(sys.argv) is 2:
 
     elif sys.argv[1].lower() == 'install':
         subprocess.run('sudo yum install -y mysql-devel', shell=True)
+        subprocess.run('sudo yum install -y SDL2 SDL2-devel SDL2_image SDL2_image-devel SDL2_ttf SDL2_ttf-devel', shell=True)
+        subprocess.run('sudo yum install -y mariadb mariadb-server', shell=True)
+        subprocess.run('systemctl start mariadb', shell=True)
+        subprocess.run('systemctl enable mariadb', shell=True)
+
+        
+        
 
     else:
         raise ValueError('Invalid Input: Not a valid command')

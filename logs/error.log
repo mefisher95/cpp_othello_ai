@@ -18,3 +18,33 @@ Mon Jan 18 20:01:54 2021
 >> BitException error 1: Invalid Position; position '35' already occupied (int pos)
 Mon Jan 25 19:56:27 2021
 >> BitException error 1: Invalid Position; position '27' already occupied (int pos)
+Wed Jan 27 09:56:14 2021
+>> MySQLException error 0: Can't connect to MySQL server on '127.0.0.1' (115)
+Wed Jan 27 10:31:18 2021
+>> MySQLException error 0: Access denied for user 'root'@'localhost' (using password: YES)
+Wed Jan 27 10:33:10 2021
+>> MySQLException error 1: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+Wed Jan 27 10:36:44 2021
+>> MySQLException error 1: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+Wed Jan 27 10:37:06 2021
+>> MySQLException error 1: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+Wed Jan 27 10:39:04 2021
+>> MySQLException error 1: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1
+Wed Jan 27 10:39:51 2021
+>> MySQLException error 0: Unknown database 'Othello'
+Wed Jan 27 15:00:53 2021
+>> MySQLException error 0: Unknown database 'Othello'
+Wed Jan 27 15:01:14 2021
+>> MySQLException error 0: Unknown database 'Othello'
+Wed Jan 27 15:01:46 2021
+>> MySQLException error 0: Unknown database 'Othello'
+Wed Jan 27 15:32:40 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Jan 27 15:34:12 2021
+>> MySQLException error 1: Unknown column 'p0brain' in 'field list'
+Wed Jan 27 15:34:49 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Jan 27 15:35:39 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Jan 27 15:36:17 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'

@@ -6,12 +6,19 @@
 #include "Exception.h"
 #include "util.h"
 #include "Brain.h"
+#include "Database_connector.h"
+
+struct move_data
+{
+    bool player;
+    int move;
+};
 
 class Game
 {
 public:
     Game(int player0_brain = BrainRandom, int player1_brain = BrainRandom)
-    :player_turn(1)
+    :player_turn(1), db("root", "", "Othello", "127.0.0.1")
     {
         switch (player0_brain)
         {
@@ -50,6 +57,7 @@ public:
 
     void play_game()
     {
+        db.start_game(p0brain->type(), p1brain->type());
         print_board();
         int turn = 0;
         while(1)
@@ -115,6 +123,7 @@ private:
     const Brain* p0brain;
     const Brain* p1brain;
     Bitboard board;
+    Database_connector db;
 
     int player_turn;
 

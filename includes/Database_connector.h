@@ -10,7 +10,7 @@ public:
                        const std::string &, const std::string &);
 
 
-   void start_game();
+   void start_game(const std::string&, const std::string&);
    void clear_records();
    int current_game() const;
    void insert_move(const int, const int);
