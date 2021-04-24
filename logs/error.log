@@ -1,0 +1,32 @@
+Wed Apr 21 23:06:58 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Apr 21 23:11:09 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Apr 21 23:11:25 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Wed Apr 21 23:14:25 2021
+>> MySQLException error 1: Table 'Othello.INTOGames' doesn't exist
+Wed Apr 21 23:14:36 2021
+>> MySQLException error 1: Unknown column 'HeuristicOnly' in 'field list'
+Fri Apr 23 18:10:23 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 18:10:59 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 18:26:41 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:24:00 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:25:24 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:30:42 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:30:54 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:38:48 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:40:37 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 19:48:30 2021
+>> HeuristicException error 1: invalid move
+Fri Apr 23 23:52:48 2021
+>> MySQLException error 1: Unknown table 'Othello.Options_data'
